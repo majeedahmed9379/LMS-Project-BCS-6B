@@ -1,5 +1,3 @@
-
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var classSchema = new Schema({
@@ -26,6 +24,7 @@ var classSchema = new Schema({
     assignments:{
         type:[String]
     },
+
     quizResponse:{
         type:[
             {
@@ -37,7 +36,21 @@ var classSchema = new Schema({
             }
         ]
 
+    },
+
+    assignmentResponse:{
+        type:[
+            {
+                sid:{
+                    type: mongoose.Types.ObjectId,
+                    ref:"Student"
+                },
+                answer: String
+            }
+        ]
+
     }
+
 });
 
 const Class = mongoose.model('Class', classSchema);

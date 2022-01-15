@@ -1,8 +1,8 @@
 /*
-◦	Log in
+◦	Log in 
 ◦	View Dashboard
 ◦	Add Quiz
-◦	view attempted Quizzes
+◦	view attempted Quizzes  
 ◦	Download attempted Quizzes
 ◦	Add Assignment
 ◦	View submitted Assignment
