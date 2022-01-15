@@ -10,23 +10,6 @@ var {Student} = require('../models/student');
 
 var {Admin} = require("../models/admin");
 
-//Adding an admin
-/*
-router.post("/addAdmin",async function(req,res){
-    const {error} = validateAdmin(req.body);
-    if(error) return res.status(400).send("The entered login details are invalid");
-    const salt = await bcrypt.genSalt(10);
-    const pass = await bcrypt.hash(req.body.password,salt);
-    const admin = new Admin({
-        name:req.body.name,
-        username:req.body.username,
-        password:pass
-    })
-    await admin.save();
-    res.send(admin);
-});
-*/
-
 //Authenticating login
 router.post("/adminlogin",async function(req,res){
     const {error} = validateAdminLogin(req.body);
@@ -41,6 +24,8 @@ router.post("/adminlogin",async function(req,res){
 
 
 })
+
+
 
 /* GET Operations */
 
@@ -176,7 +161,7 @@ router.post('/addstudent',async function(req, res) {
 {
 	"name":"Haeaf Malik",
 	"rollno":"BCS 080",
-	"username":"hj@gmail.com",
+	"username":"hm@gmail.com",
 	"password": "12345"
 }
 */

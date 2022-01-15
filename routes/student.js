@@ -1,4 +1,5 @@
 /*
+•   Login and load classes
 •   View Classes
 •	View Quiz
 •	Attempt Quiz
@@ -36,7 +37,7 @@ router.post("/login",async function(req,res){
     if(!student) return res.status(200).send("Invalid Email or password");
 
     const validPassword = await bcrypt.compare(req.body.password,student.password)
-    if(!validPassword) return res.status(200).send("Invalid Email or password");
+    if(!validPassword) return res.status(400).send("Invalid Email or password");
     sid = student._id;
     
     var classes = await Class.find().select({_id:1,students:1});
@@ -52,7 +53,7 @@ router.post("/login",async function(req,res){
             if(students[j].sid ==  sid.toString()){
                 console.log("Found");
                 var c = await Class.find({_id:classes[i]._id}).populate('teacher','-_id name');
-                myClasses.push(c);
+                myClasses.push(c._id);
 
             }
         }
