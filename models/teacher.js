@@ -24,7 +24,7 @@ var teacherSchema = new Schema({
         min:5,
         max:1024
     },
-    isTeacher:true
+    isTeacher:Boolean
 });
 const Teacher = mongoose.model('Teacher', teacherSchema);;
 
