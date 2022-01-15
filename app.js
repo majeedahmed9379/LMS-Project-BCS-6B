@@ -10,6 +10,7 @@ app.use(express.json());
 
 const index = require('./routes/index');
 const admin = require('./routes/admin');
+const teacher = require('./routes/teacher');
 const { ifError } = require('assert');
 // if(!config.get('jwtPrivateKey')){
 //     console.log("Fatal error, Private key not defined");
@@ -23,6 +24,7 @@ mongoose.connect('mongodb://localhost/LMS')
 
 app.use("/lms/",index);
 app.use("/admin",admin);
+app.use("/teacher",teacher);
 
 //Checking environment
 if(app.get('env') === 'development'){

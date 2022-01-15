@@ -19,6 +19,24 @@ var classSchema = new Schema({
                 ref: 'Student'
             }
         }]
+    },
+    quizzes:{
+        type:[String]
+    },
+    assignments:{
+        type:[String]
+    },
+    quizResponse:{
+        type:[
+            {
+                sid:{
+                    type: mongoose.Types.ObjectId,
+                    ref:"Student"
+                },
+                answer: String
+            }
+        ]
+
     }
 });
 
