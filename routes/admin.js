@@ -3,39 +3,39 @@ const Joi = require("joi");
 Joi.objectId = require('joi-objectid')(Joi);
 const bcrypt = require('bcrypt');
 var router = express.Router();
-// var Admin = require('../models/admin');
 var Class = require('../models/class');
 var Teacher = require('../models/teacher');
 var {Student} = require('../models/student');
 
 var {Admin} = require("../models/admin");
+const AdminAuthorization = require('../middleware/AdminAuthorization');
 
 //Authenticating login
-router.post("/adminlogin",async function(req,res){
-    const {error} = validateAdminLogin(req.body);
-    if(error) return res.status(400).send("The entered login details are invalid");
-    const admin = await Admin.findOne({username:req.body.username});
+// router.post("/adminlogin",async function(req,res){
+//     const {error} = validateAdminLogin(req.body);
+//     if(error) return res.status(400).send("The entered login details are invalid");
+//     const admin = await Admin.findOne({username:req.body.username});
 
-    if(!admin) return res.status(200).send("Invalid Email or password");
+//     if(!admin) return res.status(200).send("Invalid Email or password");
 
-    const validPassword = await bcrypt.compare(req.body.password,admin.password)
-    if(!validPassword) return res.status(200).send("Invalid Email or password");
-    res.send("Logged in successfully");
+//     const validPassword = await bcrypt.compare(req.body.password,admin.password)
+//     if(!validPassword) return res.status(200).send("Invalid Email or password");
+//     res.send("Logged in successfully");
 
 
-})
+// })
 
 
 
 /* GET Operations */
 
-router.get('/', function(req, res) {
-    res.send('Welcome to Admin panel');
+router.get('/',AdminAuthorization, function(req, res) {
+    res.send("Hello "+req.user.name+' Welcome to Admin panel');
 
 });
 
 
-router.get('/classes',async function(req, res) {
+router.get('/classes',AdminAuthorization, async function(req, res) {
     const classes = await Class.find()
     .populate('teacher','-_id name')
     .populate('students.sid','name rollno')
@@ -45,7 +45,7 @@ router.get('/classes',async function(req, res) {
 });
 
 
-router.get('/students',async function(req, res) {
+router.get('/students',AdminAuthorization, async function(req, res) {
     const students = await Student.find()
                         .sort("name");
    if(students.length == 0) return res.send("No Students found");
@@ -53,7 +53,7 @@ router.get('/students',async function(req, res) {
 });
 
 
-router.get('/teachers',async function(req, res) {
+router.get('/teachers',AdminAuthorization, async function(req, res) {
     const teachers = await Teacher.find()
                         .sort("name");
    if(!teachers.length>0) return res.send("No teachers found");
@@ -61,7 +61,7 @@ router.get('/teachers',async function(req, res) {
 });
 
 
-router.get('/classes/:id',async function(req, res) {
+router.get('/classes/:id',AdminAuthorization, async function(req, res) {
     const classes = await Class.findById(req.params.id);
     if(!classes) return res.status(400).send("Class not found");
     res.send(classes);
@@ -69,7 +69,7 @@ router.get('/classes/:id',async function(req, res) {
 });
 
 
-router.get('/students/:id',async function(req, res) {
+router.get('/students/:id',AdminAuthorization, async function(req, res) {
     const student = await Student.findById(req.params.id);
     
     if(!student) return res.status(400).send("Student not found");
@@ -77,7 +77,7 @@ router.get('/students/:id',async function(req, res) {
     res.send(student);   
 
 });
-router.get('/teachers/:id',async function(req, res) {
+router.get('/teachers/:id',AdminAuthorization, async function(req, res) {
     
     const teacher = await Teacher.findById(req.params.id);
 
@@ -89,7 +89,7 @@ router.get('/teachers/:id',async function(req, res) {
 
 
 //POST Operations
-router.post('/addteacher',async function(req, res) {
+router.post('/addteacher',AdminAuthorization, async function(req, res) {
     
     const {error} = validateTeacher(req.body);
 
@@ -109,7 +109,7 @@ router.post('/addteacher',async function(req, res) {
     res.send(teacher);
 });
 
-router.post('/addclass',async function(req, res) {
+router.post('/addclass',AdminAuthorization, async function(req, res) {
     const {error} = validateClass(req.body);
     
     if(error) return res.status(400).send("The entered class details are invalid");
@@ -136,7 +136,7 @@ router.post('/addclass',async function(req, res) {
     
 });
 
-router.post('/addstudent',async function(req, res) {
+router.post('/addstudent',AdminAuthorization, async function(req, res) {
 
     const {error} = validateStudent(req.body);
     
@@ -168,7 +168,7 @@ router.post('/addstudent',async function(req, res) {
    
 });
 //PUT Operations
-router.put('/assign/:cid/Student/:sid',async function(req, res) {
+router.put('/assign/:cid/Student/:sid',AdminAuthorization, async function(req, res) {
     
     const check = await Class.findById({_id:req.params.cid});
 
@@ -199,18 +199,18 @@ router.put('/assign/:cid/Student/:sid',async function(req, res) {
 });
 
 //Delete Operations
-router.delete('/delteacher/:id',async function(req, res) {
+router.delete('/delteacher/:id',AdminAuthorization, async function(req, res) {
     const teacher = await  Teacher.findByIdAndRemove(req.params.id);
     if(!teacher) return res.status(400).send("No teacher found with the given ID");
     res.send("Deleted teacher: ",teacher);
 });
-router.delete('/delclass/:id',async function(req, res) {
+router.delete('/delclass/:id',AdminAuthorization, async function(req, res) {
     const delclass = await  Class.findByIdAndRemove(req.params.id);
     if(!delclass) return res.status(400).send("No Class found with the given ID");
     res.send("Deleted class: ",delclass);
     
 });
-router.delete('/delstudent/:id',async function(req, res) {
+router.delete('/delstudent/:id',AdminAuthorization, async function(req, res) {
     const delstudent = await  Student.findByIdAndDelete(req.params.id);
     if(!delstudent) return res.status(400).send("No Student found with the given ID");
     res.send("Deleted student: ",delstudent);
@@ -260,10 +260,3 @@ function validateAdmin(logindetails){
     return schema.validate(logindetails);
 }
 
-function validateAdminLogin(logindetails){
-    const schema = Joi.object({
-        username:Joi.string().required(),
-        password:Joi.string().required()
-    });
-    return schema.validate(logindetails);
-}

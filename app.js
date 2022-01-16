@@ -14,10 +14,10 @@ const teacher = require('./routes/teacher');
 const student = require('./routes/student');
 const adminLogin = require('./routes/AdminAuthentication');
 
-if(!config.get('jwtPrivateKey')){
-    console.log("Fatal error, Private key not defined");
-    process.exit(1)
-}
+// if(!config.get('jwtPrivateKey')){
+//     console.log("Fatal error, Private key not defined");
+//     process.exit(1)
+// }
 
 mongoose.connect('mongodb://localhost/LMS')
     .then(()=>console.log("Connected to database successfully"))
