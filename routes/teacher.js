@@ -65,6 +65,51 @@ router.get('/addquiz',async function(req, res) {
 });
 
 
+router.put('/addquiz/:cid',async function(req, res) {
+
+   
+
+    const thisclass = await Class.findById(req.params.cid);
+
+    if(JSON.stringify(thisclass.teacher) != JSON.stringify(t_id)) return res.send("Sorry, You are not assigned to this class");
+
+    if(!thisclass) return res.send("Sorry, You are not assigned to any class");
+
+    const quiz = req.body.quiz;
+
+    var quizzes = [];
+
+    if(thisclass.quizzes.length == 0){
+
+        console.log("No previous quizzes added");
+
+        quizzes.push(quiz);
+
+    }
+
+    else{
+
+        quizzes = thisclass.quizzes;
+
+        quizzes.push(quiz);
+
+    }
+
+    const classupdate = await Class.findOneAndUpdate({teacher:t_id},{
+
+        $set:{
+
+            quizzes:quizzes
+
+        },new:true
+
+    });
+
+    res.send(classupdate);
+
+});
+
+
 
 
 

@@ -11,7 +11,7 @@ var {Student} = require('../models/student');
 var {Admin} = require("../models/admin");
 
 //Adding an admin
-/*
+
 router.post("/addAdmin",async function(req,res){
     const {error} = validateAdmin(req.body);
     if(error) return res.status(400).send("The entered login details are invalid");
@@ -23,9 +23,9 @@ router.post("/addAdmin",async function(req,res){
         password:pass
     })
     await admin.save();
-    res.send(admin);
+    res.send(admin); 
 });
-*/
+
 
 //Authenticating login
 router.post("/adminlogin",async function(req,res){
@@ -125,13 +125,14 @@ router.post('/addteacher',async function(req, res) {
 });
 
 router.post('/addclass',async function(req, res) {
-    const {error} = validateClass(req.body);
+     const {error} = validateClass(req.body);
     
-    if(error) return res.status(400).send("The entered class details are invalid");
+     if(error) return res.status(400).send("The entered class details are invalid");
     const newClass = new Class({
         name:req.body.name,
         teacher:req.body.teacher,
-        students:req.body.students
+        students:req.body.students,
+        quiz: req.body.quiz
     })
     await newClass.save()
     
@@ -260,7 +261,8 @@ function validateClass(classDetails){
     const schema = Joi.object({
         name:Joi.string().min(3).max(255).required(),
         teacher:Joi.objectId(),
-        students:Joi.array()
+        students:Joi.array(),
+        quiz: Joi.array()
     });
     return schema.validate(classDetails);
 }
