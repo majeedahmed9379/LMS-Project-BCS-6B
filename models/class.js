@@ -25,8 +25,9 @@ var classSchema = new Schema({
         type:[String]
     },
 
-    quizResponse:{
-        type:[
+    quizResponse:[{
+        quiznumber : Number,
+        responses:[
             {
                 sid:{
                     type: mongoose.Types.ObjectId,
@@ -36,10 +37,11 @@ var classSchema = new Schema({
             }
         ]
 
-    },
+    }],
 
-    assignmentResponse:{
-        type:[
+    assignmentResponse:[{
+        assignmentnumber : Number,
+        responses:[
             {
                 sid:{
                     type: mongoose.Types.ObjectId,
@@ -49,7 +51,7 @@ var classSchema = new Schema({
             }
         ]
 
-    }
+    }]
 
 });
 

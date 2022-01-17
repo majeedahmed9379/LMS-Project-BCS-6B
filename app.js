@@ -4,7 +4,7 @@ const config = require('config');
 const app = express();
 const helmet = require('helmet');
 const morgan = require('morgan');
-
+const cors = require('cors');
 app.use(helmet());
 app.use(express.json());
 
@@ -24,19 +24,20 @@ mongoose.connect('mongodb://localhost/LMS')
     .catch((err)=>console.log(err.message));
 
 
-
+app.use(cors());
 app.use("/lms/",index);
 app.use("/admin",admin);
 app.use("/teacher",teacher);
 app.use("/student",student)
 app.use("/admin/login",adminLogin);
 
+
 //Checking environment
 if(app.get('env') === 'development'){
     app.use(morgan('tiny'));
     console.log("Morgan enabled");
 }
-var port = 3000;
+var port = 4000;
 
 app.listen(port,()=>{
     console.log(`LMS Listening on port: ${port}`);

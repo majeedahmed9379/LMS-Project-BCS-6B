@@ -39,7 +39,7 @@ router.get('/classes',AdminAuthorization, async function(req, res) {
     const classes = await Class.find()
     .populate('teacher','-_id name')
     .populate('students.sid','name rollno')
-    .select("name teacher students.name students.rollno");
+    .select("name teacher students.name students.rollno quizzes");
     if(classes.length==0) return res.send("No classes available");
     res.send(classes);
 });
