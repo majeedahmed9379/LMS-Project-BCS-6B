@@ -20,6 +20,7 @@ var classSchema = new Schema({
     },
     quizzes:{
         type:[String]
+<<<<<<< HEAD
     },
     assignments:{
         type:[String]
@@ -52,6 +53,10 @@ var classSchema = new Schema({
         ]
 
     }]
+=======
+    }
+>>>>>>> dd48ffc0b5ee0a5b037a7b685a2cf5ace77a53b2
+
 
 });
 

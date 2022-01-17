@@ -72,6 +72,18 @@ router.get("/dashboard", async function(req,res){
 })
 
 
+router.get("/viewquiz", async function(req,res){
+
+      
+    const quizes = await Class.find({id: "61e3d3c15e88b3cbfa48acad"});
+    if(thisclass.length == 0) return res.send("Sorry, You are not assigned to any class");
+
+    
+    res.send(quizes);
+  
+
+})
+
 
 
 function validateStudentLogin(logindetails){

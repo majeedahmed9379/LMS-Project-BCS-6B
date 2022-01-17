@@ -8,7 +8,27 @@ var Teacher = require('../models/teacher');
 var {Student} = require('../models/student');
 
 var {Admin} = require("../models/admin");
+<<<<<<< HEAD
 const AdminAuthorization = require('../middleware/AdminAuthorization');
+=======
+
+//Adding an admin
+
+router.post("/addAdmin",async function(req,res){
+    const {error} = validateAdmin(req.body);
+    if(error) return res.status(400).send("The entered login details are invalid");
+    const salt = await bcrypt.genSalt(10);
+    const pass = await bcrypt.hash(req.body.password,salt);
+    const admin = new Admin({
+        name:req.body.name,
+        username:req.body.username,
+        password:pass
+    })
+    await admin.save();
+    res.send(admin); 
+});
+
+>>>>>>> dd48ffc0b5ee0a5b037a7b685a2cf5ace77a53b2
 
 //Authenticating login
 // router.post("/adminlogin",async function(req,res){
@@ -109,14 +129,20 @@ router.post('/addteacher',AdminAuthorization, async function(req, res) {
     res.send(teacher);
 });
 
+<<<<<<< HEAD
 router.post('/addclass',AdminAuthorization, async function(req, res) {
     const {error} = validateClass(req.body);
+=======
+router.post('/addclass',async function(req, res) {
+     const {error} = validateClass(req.body);
+>>>>>>> dd48ffc0b5ee0a5b037a7b685a2cf5ace77a53b2
     
-    if(error) return res.status(400).send("The entered class details are invalid");
+     if(error) return res.status(400).send("The entered class details are invalid");
     const newClass = new Class({
         name:req.body.name,
         teacher:req.body.teacher,
-        students:req.body.students
+        students:req.body.students,
+        quiz: req.body.quiz
     })
     await newClass.save()
     
@@ -245,7 +271,8 @@ function validateClass(classDetails){
     const schema = Joi.object({
         name:Joi.string().min(3).max(255).required(),
         teacher:Joi.objectId(),
-        students:Joi.array()
+        students:Joi.array(),
+        quiz: Joi.array()
     });
     return schema.validate(classDetails);
 }
